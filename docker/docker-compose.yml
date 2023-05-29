@@ -6,7 +6,7 @@ services:
     command: bash -c "export NODE_OPTIONS='--openssl-legacy-provider --no-experimental-fetch' && yarn api prisma migrate deploy || yarn api prisma migrate resolve --applied "20220420012853_init" && node api/dist/index.js"
     labels:
       traefik.enable: true
-      traefik.http.routers.server.rule: Host(`teledrive.localhost`)
+      # traefik.http.routers.server.rule: Host(`teledrive.localhost`)
       traefik.port: 4000
     networks:
       - traefik
@@ -32,6 +32,8 @@ services:
   db:
     image: postgres:13
     restart: unless-stopped
+    networks:
+      - traefik
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -42,6 +44,8 @@ services:
   redis:
     image: redis:6
     restart: unless-stopped
+    networks:
+      - traefik
 
 volumes:
   teledrive-data:
